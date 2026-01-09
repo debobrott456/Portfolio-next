@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollReveal from './components/ScrollReveal';
 import Home from './components/Home';
 import About from './components/About';
 import Skills from './components/Skills';
@@ -18,6 +19,31 @@ function App() {
     document.documentElement.classList.add('dark');
   }, []);
 
+  useEffect(() => {
+    // Intersection Observer to track active section
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    // Observe all sections
+    const sections = ['home', 'about', 'skills', 'projects', 'education', 'contact'];
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const toggleTheme = () => {
     if (document.documentElement.classList.contains('dark')) {
       document.documentElement.classList.remove('dark');
@@ -27,25 +53,6 @@ function App() {
       document.documentElement.classList.add('dark');
       setDarkMode(true);
       localStorage.theme = 'dark';
-    }
-  };
-
-  const renderSection = () => {
-    switch (activeSection) {
-      case 'home':
-        return <Home setActiveSection={setActiveSection} />;
-      case 'about':
-        return <About />;
-      case 'skills':
-        return <Skills />;
-      case 'projects':
-        return <Projects />;
-      case 'education':
-        return <Education />;
-      case 'contact':
-        return <Contact />;
-      default:
-        return <Home setActiveSection={setActiveSection} />;
     }
   };
 
@@ -59,7 +66,40 @@ function App() {
       />
       
       <main className="min-h-screen">
-        {renderSection()}
+        {/* Render all sections at once for smooth scrolling */}
+        <section id="home">
+          <Home setActiveSection={setActiveSection} />
+        </section>
+        
+        <ScrollReveal delay={0.2}>
+          <section id="about">
+            <About />
+          </section>
+        </ScrollReveal>
+        
+        <ScrollReveal delay={0.1}>
+          <section id="skills">
+            <Skills />
+          </section>
+        </ScrollReveal>
+        
+        <ScrollReveal delay={0.1}>
+          <section id="projects">
+            <Projects />
+          </section>
+        </ScrollReveal>
+        
+        <ScrollReveal delay={0.1}>
+          <section id="education">
+            <Education />
+          </section>
+        </ScrollReveal>
+        
+        <ScrollReveal delay={0.1}>
+          <section id="contact">
+            <Contact />
+          </section>
+        </ScrollReveal>
       </main>
       
       <Footer 

@@ -10,13 +10,26 @@ const Footer = ({ activeSection, setActiveSection }) => {
     { id: 'contact', label: 'Contact', icon: 'mail' }
   ];
 
+  const scrollToSection = (sectionId) => {
+    if (sectionId === 'home') {
+      // Scroll to top for home
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Scroll to specific section
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <nav className="fixed bottom-0 left-0 w-full bg-background-dark/95 backdrop-blur-lg border-t border-white/5 pb-5 pt-3 px-6 z-50">
       <div className="flex justify-between items-center max-w-lg mx-auto">
         {navItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActiveSection(item.id)}
+            onClick={() => scrollToSection(item.id)}
             className="flex flex-col items-center gap-1 group"
           >
             <div className={`relative ${activeSection === item.id ? 'text-primary' : 'text-gray-500 group-hover:text-white'}`}>

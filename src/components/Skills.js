@@ -1,29 +1,18 @@
-import React from 'react';
-
 const Skills = () => {
   return (
-    <div className="bg-background-dark text-white font-sans antialiased min-h-screen w-full overflow-hidden flex flex-col relative pt-16">
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 px-5 py-6 flex justify-between items-center pointer-events-none">
-        <div className="pointer-events-auto flex items-center gap-3 bg-black/20 p-1.5 pr-4 rounded-full backdrop-blur-sm border border-white/5">
-          <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-primary to-cyan-400 p-[2px]">
-            <div className="h-full w-full rounded-full bg-background-dark flex items-center justify-center text-xs font-bold">TM</div>
-          </div>
-          <span className="text-sm font-semibold tracking-wide text-gray-200 uppercase">Joy Kumar</span>
-        </div>
-        <div className="pointer-events-auto">
-          <div className="flex items-center space-x-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            <span className="text-xs font-medium text-blue-200 tracking-wider">SKILLS VIEW</span>
-          </div>
-        </div>
-      </header>
+    <div className="bg-background-dark text-white font-sans antialiased w-full relative py-16 overflow-x-hidden">
+      {/* Section Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          My <span className="bg-gradient-to-r from-primary to-secondary text-gradient">Tech Stack</span>
+        </h2>
+        <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          Technologies and tools I use to build amazing digital experiences
+        </p>
+      </div>
 
       {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center relative w-full h-full overflow-hidden">
+      <div className="flex items-center justify-center relative w-full h-[500px] overflow-hidden">
         {/* Background Stars */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full opacity-20 animate-pulse"></div>
@@ -120,27 +109,7 @@ const Skills = () => {
             </div>
           </div>
         </div>
-      </main>
-
-      {/* Navigation */}
-      <nav className="fixed bottom-0 w-full z-50 px-4 pb-8 pt-4">
-        <div className="w-full max-w-[400px] mx-auto nav-glass rounded-full px-2 py-3 flex justify-around items-center relative shadow-2xl">
-          <a className="flex flex-col items-center justify-center w-12 h-12 rounded-full text-gray-500 hover:text-white transition-all group" href="#">
-            <span className="material-symbols-outlined text-2xl">home</span>
-          </a>
-          <a className="flex flex-col items-center justify-center w-12 h-12 rounded-full relative" href="#">
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-md"></div>
-            <span className="material-symbols-outlined text-2xl text-primary filled drop-shadow-[0_0_8px_rgba(37,99,235,0.8)] z-10">deployed_code</span>
-            <span className="absolute -bottom-1 w-1.5 h-1.5 bg-primary rounded-full shadow-[0_0_10px_#2563EB]"></span>
-          </a>
-          <a className="flex flex-col items-center justify-center w-12 h-12 rounded-full text-gray-500 hover:text-white transition-all group" href="#">
-            <span className="material-symbols-outlined text-2xl">folder</span>
-          </a>
-          <a className="flex flex-col items-center justify-center w-12 h-12 rounded-full text-gray-500 hover:text-white transition-all group" href="#">
-            <span className="material-symbols-outlined text-2xl">mail</span>
-          </a>
-        </div>
-      </nav>
+      </div>
 
       <style jsx>{`
         @keyframes orbit {
@@ -188,12 +157,6 @@ const Skills = () => {
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .nav-glass {
-          background: rgba(10, 10, 10, 0.7);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .animate-pulse-sun {
           animation: pulse-sun 4s ease-in-out infinite;

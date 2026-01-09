@@ -1,11 +1,71 @@
 import React, { useState } from 'react';
 
+// Toast Component
+const Toast = ({ show, message, type, onClose }) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed top-6 right-6 z-50 animate-slide-in">
+      <div className={`
+        flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl backdrop-blur-md border
+        ${type === 'success' 
+          ? 'bg-green-500/20 border-green-500/30 text-green-100' 
+          : 'bg-red-500/20 border-red-500/30 text-red-100'
+        }
+        transform transition-all duration-300 ease-out
+      `}>
+        <div className="flex-shrink-0">
+          {type === 'success' ? (
+            <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          )}
+        </div>
+        <div className="flex-1">
+          <p className="font-medium text-sm">{message}</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="flex-shrink-0 text-gray-400 hover:text-white transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: ''
   });
+
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    type: 'success'
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: '', type: 'success' });
+    }, 5000);
+  };
+
+  const closeToast = () => {
+    setToast({ show: false, message: '', type: 'success' });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,11 +75,33 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    // You can add your form submission logic here
+    setIsSubmitting(true);
+
+    try {
+      // Simulate form submission delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Here you would typically send the data to your backend
+      console.log('Form submitted:', formData);
+      
+      // Show success toast
+      showToast(`Thank you ${formData.name}! Your message has been sent successfully. I'll get back to you soon!`, 'success');
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        message: ''
+      });
+      
+    } catch (error) {
+      // Show error toast
+      showToast('Oops! Something went wrong. Please try again later.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const socialLinks = [
@@ -53,12 +135,30 @@ const Contact = () => {
   ];
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-x-hidden selection:bg-primary selection:text-white min-h-screen pt-16">
+    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-x-hidden selection:bg-primary selection:text-white py-16">
+      {/* Toast Notification */}
+      <Toast 
+        show={toast.show} 
+        message={toast.message} 
+        type={toast.type} 
+        onClose={closeToast} 
+      />
+
+      {/* Section Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
+          Get In <span className="bg-gradient-to-r from-primary to-secondary text-gradient">Touch</span>
+        </h2>
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Let's discuss your next project or just say hello
+        </p>
+      </div>
+
       {/* Background Effects */}
       <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2 z-0"></div>
       
-      <div className="relative flex min-h-screen w-full flex-col pb-24">
-        <div className="flex flex-col flex-1 px-6 pt-12 md:pt-20 max-w-lg mx-auto w-full z-10">
+      <div className="relative flex w-full flex-col">
+        <div className="flex flex-col flex-1 px-6 max-w-lg mx-auto w-full z-10">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] via-[#60a5fa] to-white drop-shadow-sm mb-4">
@@ -127,10 +227,20 @@ const Contact = () => {
             
             <button
               type="submit"
-              className="mt-4 w-full bg-gradient-to-r from-primary to-primary-light text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group border border-white/10"
+              disabled={isSubmitting}
+              className="mt-4 w-full bg-gradient-to-r from-primary to-primary-light text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2 group border border-white/10 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]"
             >
-              <span>Send Message</span>
-              <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform">send</span>
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <span>Sending...</span>
+                </>
+              ) : (
+                <>
+                  <span>Send Message</span>
+                  <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform">send</span>
+                </>
+              )}
             </button>
           </form>
           
